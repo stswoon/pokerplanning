@@ -1,0 +1,17 @@
+{
+  "name": "poker-planning",
+  "version": "0.0.1",
+  "description": "Poker planning",
+  "engines": {
+    "node": "16.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}
