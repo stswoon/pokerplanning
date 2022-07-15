@@ -1,0 +1,56 @@
+.greeting-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+}
+
+.greeting-form {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    height: 100px;
+    width: 300px;
+}
+
+.greeting-form__name-field {
+}
+
+.greeting-form__create-room-button {
+}
+
+.greeting-form__create-room-button [attr=disabled] {
+    color: darkslategray;
+}
+
+._hidden {
+    display: none;
+}
+
+#info {
+    position: absolute;
+    right: 0;
+    top: 10vh;
+    height: 80vh;
+    width: 150px;
+    border: 1px solid black;
+    background-color: #b5b7ee;
+}
+
+#floor-container {
+    padding-top: 30vh;
+}
+
+#floor {
+    height: 40vh;
+    margin: 0 200px 0 50px;
+    border: 1px solid black;
+    background-color: beige;
+}
+
+#table {
+    margin: 10vh 50px;
+    height: 20vh;
+    border: 1px solid black;
+    background: #1f7e1f;
+}

@@ -1,26 +1,33 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jQuery UI Accordion - Default functionality</title>
+    <title>Poker Planning</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("#accordion").accordion();
-        });
-    </script>
+    <link rel="stylesheet" href="style.css">
+    <script src="//code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="//code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="main.js"></script>
 </head>
-
 <body>
 
-    <h1>Test</h1>
+<div class="greeting-form-container">
+    <div class="greeting-form">
+        <p class="greeting-form__name-field">
+            <span>Your name:</span>
+            <input type="text" id="userNameInput" onkeyup="saveUserName(this.value)">
+        </p>
+        <button class="greeting-form__create-room-button _hidden" id="createRoomButton" onclick="createRoom()">Create
+            Room
+        </button>
+        <button class="greeting-form__back-room-button _hidden" id="backToRoomButton" onclick="backToRoom()">Back to
+            Room
+        </button>
+    </div>
+</div>
 
+<script>initGreetingForm();</script>
 
 </body>
-
 </html>
