@@ -1,20 +1,25 @@
-import express from 'express';
-import expressWs from 'express-ws';
-import {createRoom} from "./roomObservable.js";
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+const createRoom = require('./roomObservable');
 
-const PORT = process.env.PORT || 5000;
 const app = express();
-expressWs(app);
+const server = http.createServer(app);
+const PORT = process.env.PORT || 5000;
 
-app.use(express.static( 'public', {extensions: ['html']}));
+app.use(express.static('public', {extensions: ['html']}));
 
 app.get('/api/health', function (req, res) {
     res.send('OK');
 });
 
-app.ws('/api/roomState', function (ws, req) {
+const appWS = new WebSocket.Server({server, path: '/api/roomState'});
+appWS.on('connection', (ws, req, client) => {
+    console.log("test");
     const {roomId, userId, userName} = req.params;
     createRoom(ws, roomId, userId, userName, req.body);
 });
+
+
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

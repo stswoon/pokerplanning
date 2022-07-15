@@ -2,7 +2,6 @@
   "name": "poker-planning",
   "version": "0.0.1",
   "description": "Poker planning",
-  "type": "module",
   "engines": {
     "node": "16.x"
   },
@@ -12,6 +11,9 @@
   },
   "dependencies": {
     "express": "^4.15.2",
-    "express-ws": "^5.0.2"
+    "ws": "~8.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }

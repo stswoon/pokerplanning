@@ -12,11 +12,35 @@
 </head>
 <body>
 
-<div id="info">Info</div>
+<div id="info-table">
+    <div class="info"></div>
+    <button onclick="clearCards()">Clear cards</button>
+    <button onclick="flipCards()">Flip cards</button>
+</div>
+
 <div id="floor-container">
     <div id="floor">
         <div id="table">Table</div>
     </div>
+</div>
+
+<div id="cards">
+    <button onclick="throwCard(0)">0</button>
+    <button onclick="throwCard(1)">1</button>
+    <button onclick="throwCard(2)">2</button>
+    <button onclick="throwCard(3)">3</button>
+    <button onclick="throwCard(4)">4</button>
+    <button onclick="throwCard(5)">5</button>
+    <button onclick="throwCard(6)">6</button>
+    <button onclick="throwCard(7)">7</button>
+    <button onclick="throwCard(8)">8</button>
+    <button onclick="throwCard(9)">9</button>
+    <button onclick="throwCard(10)">10</button>
+    <button onclick="throwCard(15)">15</button>
+    <button onclick="throwCard(20)">20</button>
+    <button onclick="throwCard(30)">30</button>
+    <button onclick="throwCard(50)">50</button>
+    <button onclick="throwCard('?')">?</button>
 </div>
 
 <script>initRoom();</script>

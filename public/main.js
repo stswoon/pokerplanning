@@ -48,11 +48,63 @@ function backToRoom() {
 //---- room
 
 function initRoom() {
-   const userName = getCookie("userName");
-   if (!userName) {
-       const roomId = getQueryParameter("roomId");
-       redirect(`/?redirectRoomId=${roomId}`)
-   }
+    const userName = getCookie("userName");
+    if (!userName) {
+        const roomId = getQueryParameter("roomId");
+        redirect(`/?redirectRoomId=${roomId}`)
+    } else {
+        attachToRoom();
+    }
+}
+
+let ws;
+
+function attachToRoom() {
+    const roomId = getQueryParameter('roomId');
+    const userId = getCookie('userId');
+    const userName = getCookie('userName');
+    const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+    ws = new WebSocket(`${wsProtocol}://${window.location.host}/api/roomState?roomId=${roomId}&userId=${userId}&userName=${userName}`);
+
+    ws.onopen = function () {
+        console.log("Соединение установлено.");
+    };
+
+    ws.onclose = function (event) {
+        if (event.wasClean) {
+            alert('Соединение закрыто чисто');
+        } else {
+            alert('Обрыв соединения');
+        }
+        alert('Код: ' + event.code + ' причина: ' + event.reason);
+    };
+
+    ws.onerror = function (error) {
+        alert("Ошибка " + error.message);
+    };
+
+    ws.onmessage = function (event) {
+        console.log("Получены данные " + event.data);
+        drawRoom(event.data)
+    };
+}
+
+function drawRoom(data) {
+    //TODO
+    console.log(data);
+}
+
+function flipCards() {
+    ws.send({flipCards: true});
+}
+
+function clearCards() {
+    ws.send({clearCards: true});
+}
+
+function throwCard(value) {
+    const userId = getQueryParameter('userId');
+    ws.send({cards: {userId: userId, card: value}});
 }
 
 //---- utils
@@ -69,7 +121,7 @@ function setCookie(name, value) {
 }
 
 function uuidv4() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
 }
