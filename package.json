@@ -1,16 +1,19 @@
 {
   "name": "poker-planning",
-  "version": "0.0.1",
+  "version": "v0.1.0",
   "description": "Poker planning",
   "engines": {
     "node": "16.x"
   },
   "license": "MIT",
   "scripts": {
-    "start": "nodemon server/index.js"
+    "start-dev": "nodemon server/index.js",
+    "start-prod": "forever start server/index.js"
   },
   "dependencies": {
     "express": "^4.15.2",
+    "express-ws": "^5.0.2",
+    "forever": "^4.0.3",
     "ws": "~8.7.0"
   },
   "devDependencies": {

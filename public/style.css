@@ -27,7 +27,7 @@
     display: none;
 }
 
-#info {
+#info-table {
     position: absolute;
     right: 0;
     top: 10vh;

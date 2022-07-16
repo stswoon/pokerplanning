@@ -58,6 +58,7 @@ function initRoom() {
 }
 
 let ws;
+let wsTry = 0;
 
 function attachToRoom() {
     const roomId = getQueryParameter('roomId');
@@ -68,19 +69,30 @@ function attachToRoom() {
 
     ws.onopen = function () {
         console.log("Соединение установлено.");
+        wsTry = 0;
     };
 
     ws.onclose = function (event) {
         if (event.wasClean) {
-            alert('Соединение закрыто чисто');
+            console.error('Соединение закрыто чисто');
         } else {
-            alert('Обрыв соединения');
+            console.error('Обрыв соединения');
+            wsTry++;
+            if (wsTry < 5) {
+                console.log('Try again');
+                setTimeout(() => {
+                    attachToRoom();
+                }, wsTry * 1000);
+            } else {
+                console.error("No tries");
+                alert("Try to reload page or service not exist");
+            }
         }
-        alert('Код: ' + event.code + ' причина: ' + event.reason);
+        console.error('Код: ' + event.code + ' причина: ' + event.reason);
     };
 
     ws.onerror = function (error) {
-        alert("Ошибка " + error.message);
+        console.error("WS error:" + error.message);
     };
 
     ws.onmessage = function (event) {
@@ -90,21 +102,30 @@ function attachToRoom() {
 }
 
 function drawRoom(data) {
-    //TODO
-    console.log(data);
+    const room = JSON.parse(data);
+    console.trace(data);
+    let result = Object.keys(room.votes).map(voteKey => {
+        const vote = room.votes[voteKey];
+        let cardValue = vote.cardValue;
+        if (!room.flipCards) {
+            cardValue = cardValue ? "??" : "wait"
+        }
+        return `<div>${vote.userName} : ${cardValue}</div>`;
+    }).join("\n");
+    document.getElementById('info').innerHTML = result;
 }
 
 function flipCards() {
-    ws.send({flipCards: true});
+    ws.send("flipCards");
 }
 
 function clearCards() {
-    ws.send({clearCards: true});
+    ws.send("clearCards");
 }
 
 function throwCard(value) {
-    const userId = getQueryParameter('userId');
-    ws.send({cards: {userId: userId, card: value}});
+    const userId = getCookie('userId');
+    ws.send(JSON.stringify({vote: {userId: userId, cardValue: value}}));
 }
 
 //---- utils
