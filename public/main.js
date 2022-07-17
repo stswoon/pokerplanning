@@ -154,8 +154,8 @@ function drawTable(room) {
     document.getElementById('bench-down').innerHTML = "";
 
     _drawCardsAndUsers(room);
-    _drawCardsAndUsers(room, 2);
-    _drawCardsAndUsers(room, 3);
+    // _drawCardsAndUsers(room, 2);
+    // _drawCardsAndUsers(room, 3);
 
     oldRoom = room;
 }
