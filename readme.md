@@ -1,16 +1,20 @@
 # Porker planning
 
+![](img/overview.png)
+
+## Tasks
+
 Backend:
 
 - [x] /api/health
 - [x] static 
 - [x] ws://api/roomState?roomId={roomId}&userId={userId}&userName={userName}
   - [x] on connect addUser {id, name} and create room if empty
-  - on disconnect removeUser {id}
+  - [x] on disconnect removeUser {id}
   - [x] card {id, cardValue}
   - [x] clear {}
   - [x] flip {}
-  - broadcast
+  - [x] broadcast
 - not fail on error 
 - remove old rooms
 
@@ -27,8 +31,11 @@ Frontend
   * [x] send addUser command
   * [x] buttons: `clear`, `flip`
 * Pretty view:
-  * greeting
+  * [x] greeting
   * info
   * cards
   * table 
+* [x] Testing
+* Docs
+* Refactoring
 
