@@ -1,7 +1,7 @@
 module.exports = function createRoom(ws, roomId, userId, userName) {
     if (!DB[roomId]) {
         DB[roomId] = {
-            wsClients: [],
+            wsClients: {},
             roomId,
             createdDate: new Date(),
             flipCards: false,
@@ -9,7 +9,7 @@ module.exports = function createRoom(ws, roomId, userId, userName) {
         };
     }
     const room = DB[roomId];
-    room.wsClients.push(ws);
+    room.wsClients[userId] = ws;
 
     if (!room.votes[userId]) {
         room.votes[userId] = {userName, cardValue: null};
@@ -41,7 +41,9 @@ module.exports = function createRoom(ws, roomId, userId, userName) {
 
     ws.on('close', function () {
         console.log("ws closed:" + ws);
-        room.wsClients = room.wsClients.filter(item => item !== ws);
+        const findUserId = Object.keys(room.wsClients).find(userId => room.wsClients[userId] === ws);
+        delete room.wsClients[findUserId];
+        delete room.votes[findUserId];
     });
 
     setTimeout(() => {
@@ -53,7 +55,7 @@ function broadcastRoom(roomId) {
     const room = DB[roomId];
     const dtoRoom = {...room};
     delete dtoRoom.wsClients;
-    room.wsClients.forEach(ws => {
+    Object.values(room.wsClients).forEach(ws => {
         ws.send(JSON.stringify(dtoRoom));
     });
 }
