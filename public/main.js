@@ -160,6 +160,7 @@ function drawTable(room) {
     oldRoom = room;
 }
 
+//countBegin for easier debug
 function _drawCardsAndUsers(room, countBegin) {
     let count = countBegin || 1;
     Object.keys(room.votes).forEach(voteKey => {
@@ -167,7 +168,7 @@ function _drawCardsAndUsers(room, countBegin) {
         let userDiv = `<div class="room__user" id="user_${voteKey}_${count}">${vote.userName}</div>`;
         let userCard =
             `<div 
-                class="room__card ${vote.cardValue == null ? '_hidden' : ''}" 
+                class="room__card ${vote.cardValue == null ? '_nonvisible' : ''}" 
                 id="card_${voteKey}_${count}">
                     ${room.flipCards ? vote.cardValue : "??"}
             </div>`;
@@ -196,9 +197,8 @@ function _drawCardsAndUsers(room, countBegin) {
             element.classList.remove(animationClass);
             void element.offsetWidth; // -> triggering reflow /* The actual magic */
             element.classList.add(animationClass);
-
-            count++;
         }
+        count++;
     });
 }
 
