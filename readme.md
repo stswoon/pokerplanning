@@ -16,7 +16,7 @@ Backend:
   - [x] flip {}
   - [x] broadcast
 - not fail on error 
-- remove old rooms
+- [x] remove old rooms
 
 Frontend
 

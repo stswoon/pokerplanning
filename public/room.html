@@ -12,43 +12,51 @@
 </head>
 <body>
 
-<div class="room">
+<div class="room-container">
+    <div class="room">
 
-    <div class="room__info">
-        <button class="room__info-item" onclick="clearCards()">Clear cards</button>
-        <button class="room__info-item" onclick="flipCards()">Flip cards</button>
-        <div id="info-average" class="room__info-item">
-            <div>Average: ??</div>
+        <div class="room__info">
+            <button class="room__info-item" onclick="clearCards()">Clear cards</button>
+            <button class="room__info-item" onclick="flipCards()">Flip cards</button>
+            <div id="info-average" class="room__info-item">
+                <div>Average: ??</div>
+            </div>
+            <div id="info-user-cards" class="room__info-item"></div>
         </div>
-        <div id="info-user-cards" class="room__info-item"></div>
-    </div>
 
-    <div class="room__floor-container">
-        <div class="room__table-bench" id="bench-up"></div>
-        <div class="room__table" id="table-up"></div>
-        <div class="room__table" id="table-down"></div>
-        <div class="room__table-bench" id="bench-down"></div>
-    </div>
+        <div class="room__floor-container">
+            <div class="room__table-bench" id="bench-up"></div>
+            <div class="room__table-carpet">
+                <div class="room__table-carpet__left"></div>
+                <div class="room__table-carpet__middle">
+                    <div class="room__table" id="table-up"></div>
+                    <div class="room__table" id="table-down"></div>
+                </div>
+                <div class="room__table-carpet__right"></div>
+            </div>
+            <div class="room__table-bench" id="bench-down"></div>
+        </div>
 
-    <div class="room__cards">
-        <button onclick="throwCard(0)">0</button>
-        <button onclick="throwCard(1)">1</button>
-        <button onclick="throwCard(2)">2</button>
-        <button onclick="throwCard(3)">3</button>
-        <button onclick="throwCard(4)">4</button>
-        <button onclick="throwCard(5)">5</button>
-        <button onclick="throwCard(6)">6</button>
-        <button onclick="throwCard(7)">7</button>
-        <button onclick="throwCard(8)">8</button>
-        <button onclick="throwCard(9)">9</button>
-        <button onclick="throwCard(10)">10</button>
-        <button onclick="throwCard(15)">15</button>
-        <button onclick="throwCard(20)">20</button>
-        <button onclick="throwCard(30)">30</button>
-        <button onclick="throwCard(50)">50</button>
-        <button onclick="throwCard('?')">?</button>
-    </div>
+        <div class="room__cards">
+            <button onclick="throwCard(0)">0</button>
+            <button onclick="throwCard(0.5)">1/2</button>
+            <button onclick="throwCard(1)">1</button>
+            <button onclick="throwCard(2)">2</button>
+            <button onclick="throwCard(3)">3</button>
+            <button onclick="throwCard(4)">4</button>
+            <button onclick="throwCard(5)">5</button>
+            <button onclick="throwCard(6)">6</button>
+            <button onclick="throwCard(7)">7</button>
+            <button onclick="throwCard(8)">8</button>
+            <button onclick="throwCard(9)">9</button>
+            <button onclick="throwCard(10)">10</button>
+            <button onclick="throwCard(12)">12</button>
+            <button onclick="throwCard(15)">15</button>
+            <button onclick="throwCard(30)">30</button>
+            <button onclick="throwCard('?')">?</button>
+        </div>
 
+    </div>
 </div>
 
 <script>initRoom();</script>

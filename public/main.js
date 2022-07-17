@@ -143,6 +143,7 @@ function drawInfoCards(room) {
 }
 
 let oldRoom;
+
 function drawTable(room) {
     if (!oldRoom) {
         oldRoom = room;
@@ -166,11 +167,16 @@ function _drawCardsAndUsers(room, countBegin) {
     Object.keys(room.votes).forEach(voteKey => {
         const vote = room.votes[voteKey];
         let userDiv = `<div class="room__user" id="user_${voteKey}_${count}">${vote.userName}</div>`;
+        let userCardClass = 'room__card';
+        if (vote.cardValue == null ) {
+            userCardClass += ' ' + '_non-visible';
+        }
+        if (room.flipCards === false) {
+            userCardClass += ' ' + 'room__card_back';
+        }
         let userCard =
-            `<div 
-                class="room__card ${vote.cardValue == null ? '_nonvisible' : ''}" 
-                id="card_${voteKey}_${count}">
-                    ${room.flipCards ? vote.cardValue : "??"}
+            `<div class="${userCardClass}" id="card_${voteKey}_${count}">
+                    ${room.flipCards ? vote.cardValue : ""}
             </div>`;
         if (count % 2 === 0) {
             document.getElementById('table-up').innerHTML += userCard;
@@ -186,16 +192,11 @@ function _drawCardsAndUsers(room, countBegin) {
     Object.keys(room.votes).forEach(voteKey => {
         if (room.votes[voteKey].cardValue !== oldRoom.votes[voteKey]?.cardValue) {
             const element = document.getElementById(`card_${voteKey}_${count}`);
-            let animationClass;
-            if (count % 2 === 0) {
-                animationClass = "_run-transformation-down";
-            } else {
-                animationClass = "_run-transformation-up";
-            }
+            let animationClass = count % 2 === 0 ? "_run-transformation-down" : "_run-transformation-up";
 
             //https://css-tricks.com/restart-css-animation/
             element.classList.remove(animationClass);
-            void element.offsetWidth; // -> triggering reflow /* The actual magic */
+            void element.offsetWidth; // triggering reflow "The actual magic"
             element.classList.add(animationClass);
         }
         count++;
