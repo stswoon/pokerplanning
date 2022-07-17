@@ -148,6 +148,7 @@
     border: 1px solid black;
     text-align: center;
     font-size: 30px;
+    /*transform: rotate(0.02turn);*/
 }
 
 .room__card_back {

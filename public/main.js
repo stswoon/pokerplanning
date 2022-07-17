@@ -174,8 +174,10 @@ function _drawCardsAndUsers(room, countBegin) {
         if (room.flipCards === false) {
             userCardClass += ' ' + 'room__card_back';
         }
+        let rotateValue = (Math.round(Math.random() * 10) - 5) / 100;
         let userCard =
-            `<div class="${userCardClass}" id="card_${voteKey}_${count}">
+            `<div class="${userCardClass}" id="card_${voteKey}_${count}"
+                    style="transform: rotate(${rotateValue}turn);">
                     ${room.flipCards ? vote.cardValue : ""}
             </div>`;
         if (count % 2 === 0) {
