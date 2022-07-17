@@ -104,15 +104,102 @@ function attachToRoom() {
 function drawRoom(data) {
     const room = JSON.parse(data);
     console.trace(data);
+    drawAverage(room);
+    drawInfoCards(room);
+    drawTable(room);
+}
+
+function drawAverage(room) {
+    let average = "??";
+    if (room.flipCards) {
+        average = 0;
+        let count = 0;
+        Object.keys(room.votes).forEach(voteKey => {
+            const vote = room.votes[voteKey];
+            if (vote.cardValue !== "?") {
+                average += vote.cardValue;
+                count++;
+            }
+        });
+        if (count === 0) {
+            average = "??";
+        } else {
+            average = average / count;
+        }
+    }
+    document.getElementById('info-average').innerHTML = `Average: ${average}`;
+}
+
+function drawInfoCards(room) {
     let result = Object.keys(room.votes).map(voteKey => {
         const vote = room.votes[voteKey];
         let cardValue = vote.cardValue;
         if (!room.flipCards) {
-            cardValue = cardValue ? "??" : "wait"
+            cardValue = cardValue ? "??" : "wait";
         }
         return `<div>${vote.userName} : ${cardValue}</div>`;
     }).join("\n");
-    document.getElementById('info').innerHTML = result;
+    document.getElementById('info-user-cards').innerHTML = result;
+}
+
+let oldRoom;
+function drawTable(room) {
+    if (!oldRoom) {
+        oldRoom = room;
+    }
+
+    document.getElementById('table-up').innerHTML = "";
+    document.getElementById('table-down').innerHTML = "";
+    document.getElementById('bench-up').innerHTML = "";
+    document.getElementById('bench-down').innerHTML = "";
+
+    _drawCardsAndUsers(room);
+    _drawCardsAndUsers(room, 2);
+    _drawCardsAndUsers(room, 3);
+
+    oldRoom = room;
+}
+
+function _drawCardsAndUsers(room, countBegin) {
+    let count = countBegin || 1;
+    Object.keys(room.votes).forEach(voteKey => {
+        const vote = room.votes[voteKey];
+        let userDiv = `<div class="room__user" id="user_${voteKey}_${count}">${vote.userName}</div>`;
+        let userCard =
+            `<div 
+                class="room__card ${vote.cardValue == null ? '_hidden' : ''}" 
+                id="card_${voteKey}_${count}">
+                    ${room.flipCards ? vote.cardValue : "??"}
+            </div>`;
+        if (count % 2 === 0) {
+            document.getElementById('table-up').innerHTML += userCard;
+            document.getElementById('bench-up').innerHTML += userDiv;
+        } else {
+            document.getElementById('table-down').innerHTML += userCard;
+            document.getElementById('bench-down').innerHTML += userDiv;
+        }
+        count++;
+    });
+
+    count = countBegin || 1;
+    Object.keys(room.votes).forEach(voteKey => {
+        if (room.votes[voteKey].cardValue !== oldRoom.votes[voteKey].cardValue) {
+            const element = document.getElementById(`card_${voteKey}_${count}`);
+            let animationClass;
+            if (count % 2 === 0) {
+                animationClass = "_run-transformation-down";
+            } else {
+                animationClass = "_run-transformation-up";
+            }
+
+            //https://css-tricks.com/restart-css-animation/
+            element.classList.remove(animationClass);
+            void element.offsetWidth; // -> triggering reflow /* The actual magic */
+            element.classList.add(animationClass);
+
+            count++;
+        }
+    });
 }
 
 function flipCards() {

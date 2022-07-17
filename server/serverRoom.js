@@ -26,15 +26,15 @@ module.exports = function createRoom(ws, roomId, userId, userName) {
             const msgVote = JSON.parse(msg);
             vote.cardValue = msgVote.vote.cardValue;
 
-            let isAllVotes = true;
-            Object.values(room.votes).forEach(vote => {
-                if (vote.cardValue == null) {
-                    isAllVotes = false;
-                }
-            });
-            if (isAllVotes) {
-                room.flipCards = true;
-            }
+            // let isAllVotes = true;
+            // Object.values(room.votes).forEach(vote => {
+            //     if (vote.cardValue == null) {
+            //         isAllVotes = false;
+            //     }
+            // });
+            // if (isAllVotes) {
+            //     room.flipCards = true;
+            // }
         }
         broadcastRoom(roomId);
     });

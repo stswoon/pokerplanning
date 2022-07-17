@@ -22,7 +22,7 @@ app.use((error, req, res, next) => {
     res.status(500).send('Something Broke!');
 })
 
-app.get('/api/health', function (req, res) {
+app.get('health', function (req, res) {
     res.send('OK');
 });
 
