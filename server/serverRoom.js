@@ -44,6 +44,7 @@ module.exports = function createRoom(ws, roomId, userId, userName) {
         const findUserId = Object.keys(room.wsClients).find(userId => room.wsClients[userId] === ws);
         delete room.wsClients[findUserId];
         delete room.votes[findUserId];
+        broadcastRoom(roomId);
     });
 
     setTimeout(() => {
