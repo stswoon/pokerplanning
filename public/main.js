@@ -184,7 +184,7 @@ function _drawCardsAndUsers(room, countBegin) {
 
     count = countBegin || 1;
     Object.keys(room.votes).forEach(voteKey => {
-        if (room.votes[voteKey].cardValue !== oldRoom.votes[voteKey].cardValue) {
+        if (room.votes[voteKey].cardValue !== oldRoom.votes[voteKey]?.cardValue) {
             const element = document.getElementById(`card_${voteKey}_${count}`);
             let animationClass;
             if (count % 2 === 0) {
