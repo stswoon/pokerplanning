@@ -13,6 +13,8 @@ module.exports = function createRoom(ws, roomId, userId, userName) {
         } else {
             const msgVote = JSON.parse(msg);
             room.votes[userId].cardValue = msgVote.vote.cardValue;
+            const rotateValue = (Math.round(Math.random() * 10) - 5) / 100;
+            room.votes[userId].rotateValue = rotateValue;
             // flipCardsIfAllVotes(room);
         }
         broadcastRoom(roomId);
@@ -107,7 +109,7 @@ room = {
     createdDate
     flipCards
     votes: {
-        userId: {userName, cardValue(nullable)}
+        userId: {userName, cardValue(nullable), rotateValue(nullable)}
     }
 
 }

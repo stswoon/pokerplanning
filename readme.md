@@ -15,7 +15,7 @@ Backend:
   - [x] clear {}
   - [x] flip {}
   - [x] broadcast
-- not fail on error 
+- [x] not fail on error 
 - [x] remove old rooms
 
 Frontend
@@ -33,9 +33,13 @@ Frontend
 * Pretty view:
   * [x] greeting
   * info
-  * cards
   * table 
-* [x] Testing
+  * users on table
+  * cards below
+  * table, card smaller size
+  * ws angle on server + css move
+  * flip cards
+* [x] Manual Testing
 * Docs
 * Refactoring
 

@@ -172,17 +172,17 @@ function _drawCardsAndUsers(room, countBegin) {
         const vote = room.votes[voteKey];
         let userDiv = `<div class="room__user" id="user_${voteKey}_${count}">${vote.userName}</div>`;
         let userCardClass = 'room__card';
-        if (vote.cardValue == null ) {
+        if (vote.cardValue == null) {
             userCardClass += ' ' + '_non-visible';
         }
-        if (room.flipCards === false) {
-            userCardClass += ' ' + 'room__card_back';
-        }
-        let rotateValue = (Math.round(Math.random() * 10) - 5) / 100;
+        //if (room.flipCards === false) {
+        userCardClass += ' ' + 'room__card_back';
+        //}
+        const rotateValue = vote.rotateValue;
         let userCard =
             `<div class="${userCardClass}" id="card_${voteKey}_${count}"
                     style="transform: rotate(${rotateValue}turn);">
-                    ${room.flipCards ? vote.cardValue : ""}
+                    <span class="_non-visible">${room.flipCards ? vote.cardValue : ""}</span>
             </div>`;
         if (count % 2 === 0) {
             document.getElementById('table-up').innerHTML += userCard;
@@ -207,10 +207,46 @@ function _drawCardsAndUsers(room, countBegin) {
         }
         count++;
     });
+
+
+    if (room.flipCards !== oldRoom.flipCards) {
+        const cards = document.getElementsByClassName("room__card");
+        for (let card of cards) {
+            card.classList.add("_run-flip-animation");
+            setTimeout(() => {
+                card.classList.remove("_run-flip-animation");
+                if (room.flipCards === true) {
+                    card.classList.remove('room__card_back');
+                }
+            }, 1000);
+        }
+    }
+
+
+    if (room.flipCards === true) {
+        setTimeout(() => {
+            const cards = document.getElementsByClassName("room__card");
+            for (let card of cards) {
+                card.classList.remove('room__card_back');
+                card.children.item(0).classList.remove('_non-visible')
+            }
+        }, 1000);
+    }
 }
 
 function flipCards() {
     ws.send("flipCards");
+
+    // document.getElementsByClassName("room__card").item(0)
+    //     .classList.add("_run-flip-animation");
+    // setTimeout(() => {
+    //     document.getElementsByClassName("room__card").item(0)
+    //         .classList.add("_run-flip-animation");
+    //     setTimeout(() => {
+    //         document.getElementsByClassName("room__card").item(0)
+    //             .classList.remove("_run-flip-animation");
+    //     }, 1000);
+    // }, 1)
 }
 
 function clearCards() {
