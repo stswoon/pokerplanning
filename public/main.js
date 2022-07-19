@@ -97,7 +97,11 @@ function attachToRoom() {
 
     ws.onmessage = function (event) {
         console.log("Получены данные " + event.data);
-        drawRoom(event.data)
+        if (event.data === "H") {
+            console.log("heart-bit");
+        } else {
+            drawRoom(event.data);
+        }
     };
 }
 

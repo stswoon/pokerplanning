@@ -9,7 +9,7 @@ module.exports = function createRoom(ws, roomId, userId, userName) {
             Object.values(room.votes).forEach(vote => vote.cardValue = null);
             room.flipCards = false;
         } else if (msg === "flipCards") {
-            room.flipCards = true;
+            room.flipCards = !room.flipCards;
         } else {
             const msgVote = JSON.parse(msg);
             room.votes[userId].cardValue = msgVote.vote.cardValue;
@@ -39,6 +39,7 @@ function broadcastRoom(roomId) {
 function shrinkageOldRooms() {
     Object.keys(ROOM_DB).forEach(roomId => {
         if (now().getTime() > ROOM_DB[roomId].createdDate.getTime() + WEEK) {
+            console.log(`Delete room = ${roomId}`);
             delete ROOM_DB[roomId];
         }
     });
