@@ -33,6 +33,9 @@ app.ws('/api/roomState', function (ws, req) {
 
 //wa for "H15 - Idle connection" - https://github.com/heroku-examples/node-websockets/blob/main/server.js
 setInterval(() => {
+    if (appWs.getWss().clients.length) {
+        console.log("Heart-but for");
+    }
     appWs.getWss().clients.forEach(client => {
         client.send("H");
     });

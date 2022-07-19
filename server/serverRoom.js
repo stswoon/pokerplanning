@@ -38,8 +38,17 @@ function broadcastRoom(roomId) {
 
 function shrinkageOldRooms() {
     Object.keys(ROOM_DB).forEach(roomId => {
-        if (now().getTime() > ROOM_DB[roomId].createdDate.getTime() + WEEK) {
+        // const d = now();
+        // const d2 = new Date(d.getTime());
+        // d2.setSeconds(d2.getSeconds() + 1);
+        // console.log("Timeouts:" + (d2.getTime() - d.getTime()));
+        console.log("Timeouts:" + (now().getTime() - ROOM_DB[roomId].createdDate.getTime()));
+        if (now().getTime() - ROOM_DB[roomId].createdDate.getTime() > ROOM_TIMEOUT) {
             console.log(`Delete room = ${roomId}`);
+            Object.values(ROOM_DB[roomId].wsClients).forEach(wsClient => {
+                wsClient.close();
+                console.log(`Delete room = ${roomId}`);
+            });
             delete ROOM_DB[roomId];
         }
     });
@@ -51,6 +60,7 @@ function now() {
 
 function getRoomSafe(roomId) {
     if (!ROOM_DB[roomId]) {
+        console.log("Create room");
         ROOM_DB[roomId] = {
             wsClients: {},
             roomId,
@@ -87,10 +97,12 @@ function flipCardsIfAllVotes(room) {
     }
 }
 
-WEEK = 7 * 24 * 60 * 60 * 1000;
+ROOM_TIMEOUT = 8 * 60 * 60 * 1000; //8h
+//ROOM_TIMEOUT = 10 * 1000; //10s
 
 /*
 room = {
+    wsClients: {userId, wsClient}
     roomId
     createdDate
     flipCards
