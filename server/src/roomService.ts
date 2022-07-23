@@ -57,7 +57,7 @@ function broadcastRoom(roomId: RoomId) {
 }
 
 function isEmptyRoom(roomId: RoomId): boolean {
-    //TODO
+    //TODO q
 }
 
 const openCardIfAllVotes = (roomId: RoomId) => {
