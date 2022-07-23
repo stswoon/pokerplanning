@@ -1,7 +1,7 @@
 import { RoomId, UserId, ROOM_DB_API, Room } from "./roomRepository";
-import { roomUserWsMapApi } from "./roomUserWsMap";
+import { RoomUserWsMapApi } from "./roomUserWsMap";
 import { startShrinkageOldRooms } from "./shrinkageOldRooms";
-import { WS } from "./utils"
+import { JsMap, WS } from "./utils"
 
 startShrinkageOldRooms();
 
@@ -13,7 +13,7 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
         ROOM_DB_API.createRoom(roomId);
     }
     ROOM_DB_API.addUser(roomId, userId, userName);
-    roomUserWsMapApi.addUser(roomId, userId, ws);
+    RoomUserWsMapApi.addUser(roomId, userId, ws);
 
     console.log("Subscribe on user actions");
     ws.on("message", function (msg: string) {
@@ -21,7 +21,7 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
             ROOM_DB_API.clearCards(roomId);
             ROOM_DB_API.setShowCards(roomId, false);
         } else if (msg === "flipCards") {
-            const room = ROOM_DB_API.getRoomSafe(roomId);
+            const room = ROOM_DB_API.getRoom(roomId);
             ROOM_DB_API.setShowCards(roomId, room.showCards);
         } else {
             const msgVote = JSON.parse(msg);
@@ -33,11 +33,12 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
     });
     ws.on("close", function () {
         console.log(`WS for user (${userName} : ${userId}) in room (${roomId}) was closed`);
-        roomUserWsMapApi.removeUser(roomId, userId);
+        RoomUserWsMapApi.removeUser(roomId, userId);
         ROOM_DB_API.removeUser(roomId, userId);
         if (isEmptyRoom(roomId)) {
             console.log(`Room (${roomId}) is empty so remove it`);
             ROOM_DB_API.removeRoom(roomId);
+            RoomUserWsMapApi.removeRoom(roomId);
         } else {
             broadcastRoom(roomId);
         }
@@ -47,22 +48,22 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
     setTimeout(() => broadcastRoom(roomId));
 }
 
-function broadcastRoom(roomId: RoomId) {
-    console.log("Broadcast after add user to room"); //TODO
-    //TODO
-    roomUserWsMapApi.getUsersByRoom(room.roomId)
-    Object.values(room.wsClients).forEach(ws => {
-        ws.send(JSON.stringify(dtoRoom));
-    });
+const broadcastRoom = (roomId: RoomId): void => {
+    const userWsMap: JsMap<UserId, WS> = RoomUserWsMapApi.getUsersByRoom(roomId);
+    console.log(`Broadcast room (${roomId}) to users: ${Object.keys(userWsMap).join(', ')}`);
+    const room = ROOM_DB_API.getRoom(roomId);
+    Object.values(userWsMap).forEach((ws: WS) => ws.send(JSON.stringify(room)));
 }
 
-function isEmptyRoom(roomId: RoomId): boolean {
-    //TODO q
+const isEmptyRoom = (roomId: RoomId): boolean => {
+    const room = ROOM_DB_API.getRoom(roomId);
+    return !!Object.keys(room.votes).length;
 }
 
 const openCardIfAllVotes = (roomId: RoomId) => {
-    const room = ROOM_DB_API.getRoomSafe(roomId);
-    const isAllVotes: boolean = Array.from(room.votes.values()).reduce((acc, vote) => acc && vote.cardValue != null, true);
+    const room = ROOM_DB_API.getRoom(roomId);
+    const isAllVotes: boolean = Object.values(room.votes)
+        .reduce((acc, vote) => acc && vote.cardValue != null, true);
     if (isAllVotes) {
         console.log(`All votes in room (${roomId})`);
         ROOM_DB_API.setShowCards(roomId, true);

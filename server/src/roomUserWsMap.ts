@@ -1,25 +1,22 @@
 import { RoomId, UserId } from "./roomRepository";
-import { WS } from "./utils";
+import { JsMap, WS } from "./utils";
 
-const roomUserWsMap = new Map<RoomId, Map<UserId, WS>>();
+const roomUserWsMap: JsMap<RoomId, JsMap<UserId, WS>> = {};
 
 const addUser = (roomId: RoomId, userId: UserId, ws: WS): void => {
-    if (!roomUserWsMap.has(roomId)) {
-        roomUserWsMap.set(roomId, new Map());
-    }
-    roomUserWsMap.get(roomId)?.set(userId, ws);
+    roomUserWsMap[roomId] = roomUserWsMap[roomId] || {};
+    roomUserWsMap[roomId][userId] = ws;
 }
 
-const getUsersByRoom = (roomId: RoomId) {
-    return roomUserWsMap.get(roomId)?.values()
-}
+const removeUser = (roomId: RoomId, userId: UserId): void => { delete roomUserWsMap[roomId][userId] };
 
-const removeUser = (roomId: RoomId, userId: UserId) => {
-    //TODO
-}
+const getUsersByRoom = (roomId: RoomId): JsMap<UserId, WS> => { return { ...roomUserWsMap[roomId] } };
 
-export const roomUserWsMapApi = {
+const removeRoom = (id: RoomId): void => { delete roomUserWsMap[id] };
+
+export const RoomUserWsMapApi = {
     addUser,
-    getUsersByRoom
+    getUsersByRoom,
+    removeRoom,
     removeUser
 }

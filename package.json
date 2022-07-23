@@ -1,25 +1,20 @@
 {
   "name": "poker-planning",
-  "version": "v0.2.0",
+  "version": "0.2.0",
   "description": "Poker planning",
   "engines": {
     "node": "16.x"
   },
   "license": "MIT",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/server.js",
-    "serve": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
-  },
-  "dependencies": {
-    "express": "^4.15.2",
-    "express-ws": "^5.0.2"
+    "build-server": "cd server && npm ci && npm run build",
+    "build-client": "cd client && npm ci && npm run build",
+    "copy-server": "copyfiles --verbose server/dist/**/* dist",
+    "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../dist/public",
+    "start-prod": "rimraf dist && npm run build-server && npm run build-client && npm run copy-server && node dist/server.js"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/node": "^18.0.6",
-    "concurrently": "^7.3.0",
-    "nodemon": "^2.0.19",
-    "typescript": "^4.7.4"
+    "copyfiles": "^2.4.1",
+    "rimraf": "^3.0.2"
   }
 }

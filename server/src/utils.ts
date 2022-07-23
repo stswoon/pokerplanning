@@ -8,3 +8,5 @@ export const utils = {
 }
 
 export type WS = import("ws");
+
+export type JsMap<K extends string, V> = { [key in K]: V; };

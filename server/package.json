@@ -1,10 +1,10 @@
 {
   "name": "poker-planning-server",
-  "version": "v0.0.1",
+  "version": "0.0.0",
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/server.js",
-    "serve": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
+    "serve": "concurrently \"npx tsc --watch\" \"nodemon --delay 100ms dist/server.js\""
   },
   "dependencies": {
     "express": "^4.15.2",

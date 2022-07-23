@@ -1,7 +1,7 @@
-import { utils } from "./utils"
+import { JsMap, utils } from "./utils"
 
-export interface RoomId extends String { };
-export interface UserId extends String { };
+export type RoomId = string;
+export type UserId = string;
 
 export interface Vote {
     userId: UserId
@@ -11,77 +11,85 @@ export interface Vote {
 }
 
 export interface Room {
-    roomId: RoomId
+    id: RoomId
     createdDate: number
     showCards: boolean
-    votes: Map<UserId, Vote>
+    votes: JsMap<UserId, Vote>
 }
 
-const ROOM_DB = new Map<RoomId, Room>();
+const ROOM_DB: JsMap<RoomId, Room> = {};
 
-const getRoomSafe = (id: RoomId): Room => {
-    if (!ROOM_DB.has(id)) {
-        throw new Error(`Illegal ROOM_DB state: can't find roomId ${id}`);
-    }
-    return ROOM_DB.get(id) as Room;
+const getRoom = (id: RoomId): Room => {
+    const room = ROOM_DB[id];
+    if (!room) { throw new Error(`Illegal ROOM_DB state: can't find roomId ${id}`); }
+    return utils.deepCopy(room);
 }
 
-const getRoom = (id: RoomId): Room | undefined => utils.deepCopy(ROOM_DB.get(id));
+const _saveRoom = (room: Room): void => {
+    console.debug(`Room (${room.id}) was changed, new value: ${room}`);
+    ROOM_DB[room.id] = room;
+}
 
-const createRoom = (id: RoomId): void => {
-    ROOM_DB.set(id, { roomId: id, createdDate: utils.now(), showCards: false, votes: new Map() });
-};
+const isRoomExist = (id: RoomId): boolean => !!ROOM_DB[id];
+
+const createRoom = (id: RoomId): void => _saveRoom({ id, createdDate: utils.now(), showCards: false, votes: {} });
 
 const vote = (roomId: RoomId, userId: UserId, cardValue: number, rotateAngle: number): void => {
-    const room: Room = getRoomSafe(roomId);
-    const vote = room.votes.get(userId) as Vote;
-    if (!vote) {
-        throw new Error(`Illegal ROOM_DB state: can't find vote for userId (${userId}) for roomId (${roomId})`);
-    }
+    const room: Room = getRoom(roomId);
+    const vote = room.votes[userId];
+    if (!vote) { throw new Error(`Illegal ROOM_DB state: can't find vote for userId (${userId}) for roomId (${roomId})`); }
     vote.cardValue = cardValue;
     vote.rotateAngle = rotateAngle;
+    _saveRoom(room);
 }
 
 const addUser = (roomId: RoomId, userId: UserId, userName: string): void => {
-    const room: Room = getRoomSafe(roomId);
-    room.votes.set(userId, { userId, userName });
+    const room: Room = getRoom(roomId);
+    room.votes[userId] = { userId, userName };
+    _saveRoom(room);
 }
 
 const removeUser = (roomId: RoomId, userId: UserId): void => {
-    const room: Room = getRoomSafe(roomId);
-    room.votes.delete(userId);
+    const room: Room = getRoom(roomId);
+    delete room.votes[userId];
+    _saveRoom(room);
 }
 
 const getRoomIdsOlderThenDate = (filterDate: number): RoomId[] => {
-    return Array.from<Room>(ROOM_DB.values())
+    return Object.values(ROOM_DB)
         .filter((room: Room) => room.createdDate < filterDate)
-        .map((room: Room) => room.roomId);
+        .map((room: Room) => room.id);
 }
 
-const setShowCards = (roomId: RoomId, showCards: boolean): void => {
-    getRoomSafe(roomId).showCards = showCards;
+const setShowCards = (id: RoomId, showCards: boolean): void => {
+    const room = getRoom(id)
+    room.showCards = showCards;
+    _saveRoom(room);
 }
 
-const clearCards = (roomId: RoomId): void => {
-    getRoomSafe(roomId).votes.forEach(vote => {
+const clearCards = (id: RoomId): void => {
+    const room = getRoom(id);
+    Object.values(room.votes).forEach(vote => {
         vote.cardValue = undefined;
         vote.rotateAngle = undefined;
     });
+    _saveRoom(room);
 }
 
-const removeRoom = (roomId: RoomId): void => {
-    ROOM_DB.delete(roomId);
+const removeRoom = (id: RoomId): void => {
+    console.debug(`Room (${id}) was deleted`);
+    delete ROOM_DB[id];
 }
 
 export const ROOM_DB_API = {
     getRoom,
-    removeRoom,
-    getRoomSafe,
+    isRoomExist,
     createRoom,
+    removeRoom,
     vote,
     addUser,
     removeUser,
     getRoomIdsOlderThenDate,
     setShowCards,
     clearCards
-}
+};

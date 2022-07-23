@@ -28,5 +28,5 @@ appWs.app.ws('/api/roomState', (ws: WS, req: express.Request): void => {
 const HEROKU_IDLE_TIMEOUT = 50 * 1000; //50s
 setInterval(() => appWs.getWss().clients.forEach((ws: WS) => ws.send("H")), HEROKU_IDLE_TIMEOUT);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
