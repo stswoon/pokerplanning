@@ -6,7 +6,7 @@ import { JsMap, WS } from "./utils"
 startShrinkageOldRooms();
 
 export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userName: string): void => {
-    if (ROOM_DB_API.getRoom(roomId)) {
+    if (ROOM_DB_API.isRoomExist(roomId)) {
         console.log(`Add user (${userName} : ${userId}) to room (${roomId})`);
     } else {
         console.log(`Create room (${roomId}) with first user (${userName} : ${userId})`);
@@ -22,12 +22,12 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
             ROOM_DB_API.setShowCards(roomId, false);
         } else if (msg === "flipCards") {
             const room = ROOM_DB_API.getRoom(roomId);
-            ROOM_DB_API.setShowCards(roomId, room.showCards);
+            ROOM_DB_API.setShowCards(roomId, !room.showCards);
         } else {
             const msgVote = JSON.parse(msg);
             const rotateValue = (Math.round(Math.random() * 10) - 5) / 100;
             ROOM_DB_API.vote(roomId, userId, msgVote.vote.cardValue, rotateValue);
-            openCardIfAllVotes(roomId);
+            //openCardIfAllVotes(roomId);
         }
         broadcastRoom(roomId);
     });

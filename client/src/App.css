@@ -147,7 +147,18 @@
   border: 1px solid black;
   text-align: center;
   font-size: 30px;
-  /*transform: rotate(0.02turn);*/
+    background-size: 100% 100%;
+    background-image: url("assets/card.jpg");
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.room__card > span {
+    color: coral;
+    font-size: 90px;
+    font-weight: bold;
 }
 
 .room__card_back {
@@ -182,6 +193,19 @@
     opacity: 1;
     top: 0;
   }
+}
+
+._run-flip-animation {
+    animation: _flip-animation 1s ease-in;
+}
+
+@keyframes _flip-animation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(5000deg);
+    }
 }
 
 ._run-transformation-down {

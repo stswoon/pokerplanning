@@ -11,9 +11,9 @@
     "serve-client": "cd client && npm run serve",
     "build-server": "cd server && npm ci && npm run build",
     "build-client": "cd client && npm ci && npm run build",
-    "copy-server": "copyfiles --verbose server/dist/**/* dist",
-    "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../dist/public",
-    "start-prod": "rimraf dist && npm run build-server && npm run build-client && npm run copy-server && node dist/server.js"
+    "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../server/dist/public",
+    "start-prod": "npm run build-server && npm run build-client && run copy-client && node server/dist/server.js",
+    "start-prod-2": "node server/dist/server.js"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",

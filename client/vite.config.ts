@@ -5,7 +5,7 @@ import globalPackageJson from './../package.json';
 import dns from 'dns'
 
 // https://vitejs.dev/config/
-dns.setDefaultResultOrder('verbatim');
+dns.setDefaultResultOrder && dns.setDefaultResultOrder('verbatim'); //check for old node
 export default defineConfig({
   server: {
     port: 5000,
