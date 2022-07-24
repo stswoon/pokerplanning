@@ -20,6 +20,7 @@ app.get('/health', (req, res) => res.send('OK'));
 const appWs = expressWs(app);
 
 appWs.app.ws('/api/roomState', (ws: WS, req: express.Request): void => {
+    console.info(`WS request`);
     const { roomId, userId, userName } = req.query as { roomId: string, userId: string, userName: string };
     createOrJoinRoom(ws, roomId, userId, userName);
 });
