@@ -13,7 +13,7 @@
     "build-client": "cd client && npm run build",
     "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../server/dist/public",
     "start-prod": "npm run heroku-prebuild && rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
-    "build": "rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
+    "//build": "rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
     "start-prod-2": "node server/dist/server.js",
     "test": "rimraf server/dist"
   },
