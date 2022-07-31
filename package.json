@@ -9,8 +9,8 @@
   "scripts": {
     "serve-server": "cd server && npm run serve",
     "serve-client": "cd client && npm run serve",
-    "build-server": "cd server && npm ci && npm run build",
-    "build-client": "cd client && npm ci && npm run build",
+    "build-server": "cd server && npm run build",
+    "build-client": "cd client && npm run build",
     "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../server/dist/public",
     "start-prod": "npm run heroku-prebuild && rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
     "build": "rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
