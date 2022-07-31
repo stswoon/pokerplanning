@@ -1,6 +1,6 @@
 {
   "name": "poker-planning",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Poker planning",
   "engines": {
     "node": "16.x"
@@ -12,7 +12,7 @@
     "build-server": "cd server && npm ci && npm run build",
     "build-client": "cd client && npm ci && npm run build",
     "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../server/dist/public",
-    "start-prod": "npm run build-server && npm run build-client && run copy-client && node server/dist/server.js",
+    "start-prod": "rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
     "start-prod-2": "node server/dist/server.js"
   },
   "devDependencies": {

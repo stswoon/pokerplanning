@@ -1,9 +1,10 @@
 {
   "name": "poker-planning-client",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check build-only",
+    "serve": "vite",
+    "build": "vite build",
+    "//build": "run-p type-check build-only",
     "-----": "",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",

@@ -57,7 +57,7 @@ const broadcastRoom = (roomId: RoomId): void => {
 
 const isEmptyRoom = (roomId: RoomId): boolean => {
     const room = ROOM_DB_API.getRoom(roomId);
-    return !!Object.keys(room.votes).length;
+    return !Object.keys(room.votes).length;
 }
 
 const openCardIfAllVotes = (roomId: RoomId) => {
