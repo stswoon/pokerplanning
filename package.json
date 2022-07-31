@@ -7,14 +7,13 @@
   },
   "license": "MIT",
   "scripts": {
-    "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
-    "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;",
     "serve-server": "cd server && npm run serve",
     "serve-client": "cd client && npm run serve",
     "build-server": "cd server && npm ci && npm run build",
     "build-client": "cd client && npm ci && npm run build",
     "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../server/dist/public",
     "start-prod": "npm run heroku-prebuild && rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
+    "build": "rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
     "start-prod-2": "node server/dist/server.js",
     "test": "rimraf server/dist"
   },
