@@ -1,1 +1,1 @@
-web: npm run start-prod-2
+web: cd server && npm run start
