@@ -25,7 +25,7 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
             ROOM_DB_API.setShowCards(roomId, !room.showCards);
         } else {
             const msgVote = JSON.parse(msg);
-            const rotateValue = (Math.round(Math.random() * 10) - 5) / 100;
+            const rotateValue = (Math.round(Math.random() * 10) - 5) * 2; //degrees
             ROOM_DB_API.vote(roomId, userId, msgVote.vote.cardValue, rotateValue);
             //openCardIfAllVotes(roomId);
         }
