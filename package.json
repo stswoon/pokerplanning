@@ -1,9 +1,9 @@
 {
   "name": "poker-planning",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Poker planning",
   "engines": {
-    "node": "16.x"
+    "node": "14.x"
   },
   "license": "MIT",
   "scripts": {

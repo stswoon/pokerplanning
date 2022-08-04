@@ -4,14 +4,14 @@ import {defineComponent} from "vue";
 import Card from "@/modules/room/components/card/Card.vue";
 
 let avCards = [
-  0, {value: 0.5, displayText: "1/2"},
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 30, "?"
+  0, {value: 0.5, displayText: "&half;"},
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 30, "?" //easy peasy lemon squeezy
 ];
 avCards = avCards.map((el: any) => {
   if (el.value) {
     return el;
   } else {
-    return {value: el, displayText: el};
+    return {value: el, displayText: el, cardShirt: true};
   }
 })
 
@@ -19,7 +19,12 @@ export default defineComponent({
   components: {Card},
   emits: ["throwCard"],
   data() {
-    return {avCards}
+    return {avCards};
+  },
+  mounted() {
+    this.avCards.forEach((card, index) => {
+      setTimeout(() => card.cardShirt = false, 1000 + index * 100);
+    })
   }
 })
 
@@ -29,7 +34,7 @@ export default defineComponent({
 <template>
   <div class="card-board">
     <button class="card" v-for="card in avCards" @click="this.$emit('throwCard', card.value)">
-      <Card :value="card.value" :displayText="card.displayText"></Card>
+      <Card :value="card.value" :displayText="card.displayText" :card-shirt="card.cardShirt"></Card>
     </button>
   </div>
 </template>
