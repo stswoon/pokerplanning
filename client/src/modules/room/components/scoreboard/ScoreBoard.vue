@@ -28,7 +28,7 @@ export default defineComponent({
 
   computed: {
     average: function () {
-      let tmp = this.votes.filter((vote: any) => typeof vote.cardValue === "number");
+      const tmp = this.votes.filter((vote: any) => typeof vote.cardValue === "number");
       let average: number = tmp.reduce((acc: number, vote: any) => acc + vote.cardValue, 0);
       average = average / tmp.length;
       return average;

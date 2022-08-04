@@ -12,20 +12,10 @@
     "build-server": "cd server && npm run build",
     "build-client": "cd client && npm run build",
     "copy-client": "cd client/dist && copyfiles --verbose ./**/* ../../server/dist/public",
-    "start-prod": "npm run heroku-prebuild && rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
-    "//build": "rimraf server/dist && npm run build-server && npm run build-client && npm run copy-client && node server/dist/server.js",
-    "//build2": "cd server && npm run start-2",
-    "start-prod-2": "node server/dist/server.js",
-    "test": "rimraf server/dist"
+    "rm": "rimraf server/dist"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
-    "husky": "^8.0.1",
     "rimraf": "^3.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm --no-git-tag-version version patch"
-    }
   }
 }
