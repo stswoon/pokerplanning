@@ -5,7 +5,7 @@ import Card from "@/modules/room/components/card/Card.vue";
 import {roomService} from "@/modules/room/room.service";
 import ScoreBoard from "@/modules/room/components/scoreboard/ScoreBoard.vue";
 import Table from "@/modules/room/components/table/Table.vue";
-import CardBoard from "@/modules/room/components/CardBoard.vue";
+import CardBoard from "@/modules/room/components/cardboard/CardBoard.vue";
 import type {Room} from "@/modules/room/room.model";
 import type {Vote} from "@/modules/room/room.model";
 import router from "@/views/router";
@@ -70,7 +70,7 @@ export default defineComponent({
   display: grid;
   grid-template-areas:
     "A C"
-    "B B";
+    "B C";
   align-items: center;
   grid-gap: 10px;
   grid-template-rows: auto 350px;

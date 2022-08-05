@@ -91,7 +91,7 @@ export default defineComponent({
 
 }
 
-.card. _card-back {
+.card ._card-back {
   background-size: 100% 100%;
   background-image: url("card-back.png");
 }
