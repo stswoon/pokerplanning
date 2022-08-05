@@ -8,7 +8,7 @@ export default defineComponent({
     "showAnimation", "flipCardAnimation"
   ],
 
-  data: function() {
+  data: function () {
     return {
       showAnimationState: this.showAnimation
     }
@@ -42,10 +42,24 @@ export default defineComponent({
     '_run-transformation-down': this.showAnimationState === 'DOWN',
     '_run-flip-animation': flipCardAnimation
   }">
-    <div class="card"
-         :class="{ '_card-shirt': cardShirt, '_non-visible': nonVisible }"
+    <div class="flip-card card"
+         :class="{ '_non-visible': nonVisible, 'flip-card-show': cardShirt }"
          :style="{ 'transform': `rotate(${rotateAngle}deg)`}">
-      <span>{{ cardShirt ? "" : displayText }}</span>
+      <div class="flip-card-inner">
+        <div class="flip-card-back">
+          <img>
+        </div>
+        <div class="flip-card-front">
+          <span v-html="displayText"> </span>
+          <p>&half;</p>
+        </div>
+      </div>
+
+      <!--      <div class="card"-->
+      <!--           :class="{ '_card-back': cardShirt, '_non-visible': nonVisible }"-->
+      <!--           :style="{ 'transform': `rotate(${rotateAngle}deg)`}">-->
+      <!--        <span>{{ cardShirt ? "" : displayText }}</span>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -59,20 +73,32 @@ export default defineComponent({
   text-align: center;
   /*font-size: 25px;*/
   background-size: 100% 100%;
-  background-image: url("card.jpg");
+  /*//background-image: url("card.jpg");*/
   vertical-align: middle;
   justify-content: center;
   align-items: center;
   display: flex;
 }
 
-.card > span {
+.flip-card-front {
+  background-size: 100% 100%;
+  background-image: url("card.jpg");
+}
+.flip-card-front > span {
   color: coral;
   font-size: 70px;
   font-weight: bold;
+
 }
 
-.card._card-shirt {
+.card. _card-back {
+  background-size: 100% 100%;
+  background-image: url("card-back.png");
+}
+
+.flip-card-back > img {
+  height: 100%;
+  width: 100%;
   background-size: 100% 100%;
   background-image: url("card-back.png");
 }
@@ -126,6 +152,52 @@ export default defineComponent({
   to {
     transform: rotate(5000deg);
   }
+}
+
+
+.flip-card {
+  background-color: transparent;
+  height: 150px;
+  width: 100px;
+  border: 1px solid #f1f1f1;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card-show .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+  /*background-color: #bbb;*/
+  color: black;
+}
+
+/* Style the back side */
+.flip-card-back {
+  background-color: dodgerblue;
+  color: white;
+  transform: rotateY(180deg);
 }
 
 </style>
