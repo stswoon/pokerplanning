@@ -3,7 +3,14 @@
 import {defineComponent} from "vue";
 
 export default defineComponent({
-  props: ["userName", "display", "displayName", "order"]
+  props: ["userName", "display", "displayName", "order"],
+
+  computed: {
+    backgroundImage: function () {
+      const imgUrl = new URL(`./icons/u${this.order}.png`, import.meta.url).href
+      return 'url(' + imgUrl + ')';
+    }
+  }
 })
 
 </script>
@@ -11,9 +18,9 @@ export default defineComponent({
 
 <template>
   <div class="user-container" :class="{'user-in-line': display === 'line'}">
-    <div v-if="displayName === 'up'">{{ userName }}</div>
-    <div class="user" :style="{ 'background-image': `icons/u${order}.png`}"></div>
-    <div v-if="displayName === 'down' || display === 'line'">{{ userName }}</div>
+    <div class="user-name" v-if="displayName === 'up'">{{ userName }}</div>
+    <div class="user" style="'q:q'" :style="{ 'background-image': backgroundImage}"></div>
+    <div class="user-name" v-if="displayName === 'down' || display === 'line'">{{ userName }}</div>
   </div>
 </template>
 
@@ -42,6 +49,20 @@ export default defineComponent({
   margin: 0 1px 0 0;
   height: 35px;
   width: 35px;
+}
+
+.user-name {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media screen and (max-height: 800px) {
+  .user {
+    height: calc(65px * var(--media-scale));
+    width: calc(65px * var(--media-scale));
+  }
 }
 
 </style>

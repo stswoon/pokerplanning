@@ -1,33 +1,10 @@
 # Porker planning
 
-![](img/overview.png)
+Free and simple Poker Planing App without registration. No restriction to people in room.
 
-//TODO: user icons
+https://stswoon-poker-planning.herokuapp.com/
 
-//TODO: small screens
+![](etc/overview.png)
 
-//Borders on card, 
 
-// left menu border, become bigger if more users
 
-// average
-
-//make bench a little bigger then tabble
-
-// 0.5 -> 1/2 on backend, 
-
-// favicon
-
-// check long names in user and left border
-
-//chekc user down
-
-//remove 1/2, center value
-
-//hover by border, outline
-
-//buttons in left
-
-//change user name
-
-//min width a little biggger

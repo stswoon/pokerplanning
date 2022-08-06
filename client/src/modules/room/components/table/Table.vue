@@ -6,22 +6,22 @@ import User from "@/modules/room/components/user/User.vue";
 
 export default defineComponent({
   components: {Card, User},
-  props: {
-    votes: {type: Array, default: []},
-    showCards: {type: Boolean, default: false}
-  },
-
-  data() {
-    return {}
-  },
-
+  props: ["votes", "showCards"],
   computed: {
     voteUp: function () {
-      const tmp = this.votes.filter((el: any, i: number) => i % 2 === 0);
+      let tmp = this.votes.map((el, i) => {
+        el.order = i+1;
+        return el;
+      });
+      tmp = tmp.filter((el: any, i: number) => i % 2 === 0);
       return tmp;
     },
     voteDown: function () {
-      const tmp = this.votes.filter((el: any, i: number) => i % 2 !== 0);
+      let tmp = this.votes.map((el, i) => {
+        el.order = i+1;
+        return el;
+      });
+      tmp = tmp.filter((el: any, i: number) => i % 2 !== 0);
       return tmp;
     }
   }
@@ -35,7 +35,11 @@ export default defineComponent({
   <div class="table-container">
 
     <div class="table-bench" id="bench-up">
-      <User v-for="vote in voteUp" :userName="vote.userName" :display-name="'up'"></User>
+      <User v-for="vote in voteUp"
+            :userName="vote.userName"
+            :display-name="'up'"
+            :order="vote.order"
+      ></User>
     </div>
 
     <div class="table">
@@ -44,7 +48,6 @@ export default defineComponent({
         <div class="table__middle-up">
           <Card v-for="vote in voteUp"
                 :value="vote.cardValue"
-                :display-text="vote.cardValue"
                 :rotateAngle="vote.rotateAngle"
                 :cardShirt="!showCards"
                 :non-visible="vote.cardValue == null"
@@ -54,7 +57,6 @@ export default defineComponent({
         <div class="table__middle-down">
           <Card v-for="vote in voteDown"
                 :value="vote.cardValue"
-                :display-text="vote.cardValue"
                 :rotateAngle="vote.rotateAngle"
                 :cardShirt="!showCards"
                 :non-visible="vote.cardValue == null"
@@ -66,7 +68,11 @@ export default defineComponent({
     </div>
 
     <div class="table-bench" id="bench-down">
-      <User v-for="vote in voteDown" :userName="vote.userName" :display-name="'down'"></User>
+      <User v-for="vote in voteDown"
+            :userName="vote.userName"
+            :display-name="'down'"
+            :order="vote.order"
+      ></User>
     </div>
 
   </div>
@@ -107,14 +113,14 @@ export default defineComponent({
   background-image: url("table-left.png");
   background-size: 100% 100%;
   width: 260px;
-  height: 400px;
+  height: 380px;
 }
 
 .table__middle {
   background-image: url("table-middle.png");
   background-size: 100% 100%;
   width: calc(100% - 450px);
-  height: 400px;
+  height: 380px;
 }
 
 .table__middle-up, .table__middle-down {
@@ -129,7 +135,26 @@ export default defineComponent({
   background-image: url("table-right.png");
   background-size: 100% 100%;
   width: 190px;
-  height: 400px;
+  height: 380px;
+}
+
+@media screen and (max-height: 800px) {
+  .table-bench {
+    height: 60px;
+    margin: 0 170px 0 240px;
+  }
+  .table__left {
+    width: 240px;
+    height: 360px;
+  }
+  .table__right {
+    width: 170px;
+    height: 360px;
+  }
+  .table__middle {
+    width: calc(100% - 410px);
+    height: 360px;
+  }
 }
 
 </style>

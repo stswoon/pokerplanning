@@ -6,7 +6,7 @@ import type {Vote} from "@/modules/room/room.model";
 
 export default defineComponent({
   components: {User},
-  emits: ["clearCards", "flipCards"],
+  emits: ["clearCards", "flipCards", "changeName"],
   props: {
     votes: {type: Array, default: []},
     showCards: {type: Boolean, default: false}
@@ -15,13 +15,9 @@ export default defineComponent({
   methods: {
     cardValueDisplay: function (vote: Vote) {
       if (this.showCards) {
-        return vote.cardValue || "no card";
+        return vote.cardValue == null ? "no card" : vote.cardValue;
       } else {
-        if (vote.cardValue) {
-          return "??";
-        } else {
-          return "waiting"
-        }
+        return  vote.cardValue == null ? "waiting" : "??";
       }
     }
   },
@@ -31,6 +27,7 @@ export default defineComponent({
       const tmp = this.votes.filter((vote: any) => typeof vote.cardValue === "number");
       let average: number = tmp.reduce((acc: number, vote: any) => acc + vote.cardValue, 0);
       average = average / tmp.length;
+      average = Math.round(average * 10) / 10;
       return average;
     }
   }
@@ -43,18 +40,27 @@ export default defineComponent({
   <div class="scoreboard">
     <button @click="this.$emit('clearCards')">Clear cards</button>
     <button @click="this.$emit('flipCards')">Flip cards</button>
-    <div>Average: {{ showCards ? average : "??" }}</div>
+    <hr/>
+    <div class="average">Average: {{ showCards ? average : "??" }}</div>
+    <hr/>
     <div>
       <div class="scoreboard__user-line" v-for="(vote, index) in votes">
-        <span><User :user-name="vote.userName" :display="'line'" :order="index"></User></span>
+        <span><User :user-name="vote.userName" :display="'line'" :order="index+1"></User></span>
         <span>:&nbsp;</span>
         <span>{{ cardValueDisplay(vote) }}</span>
       </div>
     </div>
+    <hr/>
+    <button @click="this.$emit('changeName')">Change name</button>
   </div>
 </template>
 
 <style scoped>
+
+.scoreboard .average {
+  font-size: 30px;
+  font-weight: bold;
+}
 
 .scoreboard {
   box-sizing: border-box;

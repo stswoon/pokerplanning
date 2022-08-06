@@ -76,5 +76,5 @@ export const roomService = {
     setUserId,
     getUserId,
     setUserName,
-    getUserName
+    getUserName,
 }

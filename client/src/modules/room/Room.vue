@@ -30,6 +30,11 @@ export default defineComponent({
     },
     flipCards: function () {
       roomService.flipCards();
+    },
+    changeName: function () {
+      roomService.setUserName("");
+      const roomId = utils.getQueryParameter("roomId");
+      router.push(`/?redirectRoomId=${roomId}`);
     }
   },
 
@@ -58,7 +63,11 @@ export default defineComponent({
       <CardBoard @throwCard="throwCard"></CardBoard>
     </div>
     <div class="room-container__score-board">
-      <ScoreBoard :votes="votes" :show-cards="showCards" @clearCards="clearCards" @flipCards="flipCards"></ScoreBoard>
+      <ScoreBoard :votes="votes" :show-cards="showCards"
+                  @clearCards="clearCards"
+                  @flipCards="flipCards"
+                  @changeName="changeName"
+      ></ScoreBoard>
     </div>
   </div>
 </template>
@@ -77,8 +86,8 @@ export default defineComponent({
   grid-template-columns: auto 200px;
 
   margin: 10px;
-  height: calc(100vh - 20px);
-  min-width: 1000px;
+  height: calc(100vh - 40px);
+  min-width: 1030px;
 }
 
 .room-container__table {
@@ -97,6 +106,18 @@ export default defineComponent({
   grid-area: C;
   height: 100%;
   overflow: hidden;
+}
+
+@media screen and (max-height: 800px) {
+  .room-container {
+    grid-gap: 2px;
+    grid-template-rows: auto 230px;
+    grid-template-columns: auto 200px;
+    margin: 2px;
+    height: calc(100vh - 30px);
+    min-width: 900px;
+    min-height: 730px;
+  }
 }
 
 </style>

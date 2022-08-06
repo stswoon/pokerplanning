@@ -4,13 +4,18 @@ import {defineComponent} from "vue";
 
 export default defineComponent({
   props: [
-    "cardShirt", "rotateAngle", "value", "displayText", "nonVisible",
-    "showAnimation", "flipCardAnimation"
+    "cardShirt", "rotateAngle", "value", "nonVisible", "showAnimation", "flipCardAnimation"
   ],
 
   data: function () {
     return {
       showAnimationState: this.showAnimation
+    }
+  },
+
+  computed: {
+    displayText: function () {
+      return this.value  === 0.5 ? "&half;" : this.value;
     }
   },
 
@@ -25,10 +30,6 @@ export default defineComponent({
         element.classList.add(animationClass);
       }
     }
-  },
-
-  mounted() {
-    console.debug("mount");
   }
 })
 
@@ -51,15 +52,8 @@ export default defineComponent({
         </div>
         <div class="flip-card-front">
           <span v-html="displayText"> </span>
-          <p>&half;</p>
         </div>
       </div>
-
-      <!--      <div class="card"-->
-      <!--           :class="{ '_card-back': cardShirt, '_non-visible': nonVisible }"-->
-      <!--           :style="{ 'transform': `rotate(${rotateAngle}deg)`}">-->
-      <!--        <span>{{ cardShirt ? "" : displayText }}</span>-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -80,10 +74,22 @@ export default defineComponent({
   display: flex;
 }
 
+.flip-card {
+  background-color: transparent;
+  height: 150px;
+  width: 100px;
+  /*border: 1px solid #f1f1f1;*/
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
 .flip-card-front {
   background-size: 100% 100%;
   background-image: url("card.jpg");
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .flip-card-front > span {
   color: coral;
   font-size: 70px;
@@ -155,14 +161,6 @@ export default defineComponent({
 }
 
 
-.flip-card {
-  background-color: transparent;
-  height: 150px;
-  width: 100px;
-  border: 1px solid #f1f1f1;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
-}
-
 /* This container is needed to position the front and back side */
 .flip-card-inner {
   position: relative;
@@ -198,6 +196,23 @@ export default defineComponent({
   background-color: dodgerblue;
   color: white;
   transform: rotateY(180deg);
+}
+
+@media screen and (max-height: 800px) {
+  .card {
+    height: calc(150px * var(--media-scale));
+    width: calc(100px * var(--media-scale));
+    margin: 1px;
+  }
+
+  .flip-card {
+    height: calc(150px * var(--media-scale));
+    width: calc(100px * var(--media-scale));
+  }
+
+  .flip-card-front > span {
+    font-size: calc(70px * var(--media-scale));
+  }
 }
 
 </style>
