@@ -17,7 +17,7 @@ export default defineComponent({
       if (this.showCards) {
         return vote.cardValue == null ? "no card" : vote.cardValue;
       } else {
-        return  vote.cardValue == null ? "waiting" : "??";
+        return vote.cardValue == null ? "waiting" : "??";
       }
     }
   },
@@ -52,10 +52,20 @@ export default defineComponent({
     </div>
     <hr/>
     <button @click="this.$emit('changeName')">Change name</button>
+    <hr/>
+    <div class="donate">
+      <a href="https://yoomoney.ru/to/41001998657825">Donate Thanks</a>
+    </div>
   </div>
 </template>
 
 <style scoped>
+
+.donate {
+  display: flex;
+  justify-content: center;
+}
+
 
 .scoreboard .average {
   font-size: 30px;
@@ -67,7 +77,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   /*position: absolute;*/
-  right: 0;
+  /*right: 0;*/
   height: 100%;
   width: 100%;
   border: 1px solid black;
