@@ -96,7 +96,7 @@ export default defineComponent({
 
 .table-bench {
   display: flex;
-  height: 80px;
+  height: 77px;
   margin: 0 190px 0 260px;
 
   justify-content: space-around;
