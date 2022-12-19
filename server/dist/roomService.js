@@ -32,7 +32,7 @@ const createOrJoinRoom = (ws, roomId, userId, userName) => {
             const msgVote = JSON.parse(msg);
             const rotateValue = (Math.round(Math.random() * 10) - 5) * 2; //degrees
             roomRepository_1.ROOM_DB_API.vote(roomId, userId, msgVote.vote.cardValue, rotateValue);
-            //openCardIfAllVotes(roomId);
+            openCardIfAllVotes(roomId);
         }
         broadcastRoom(roomId);
     });

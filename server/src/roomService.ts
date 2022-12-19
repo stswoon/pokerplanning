@@ -29,7 +29,7 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
             const msgVote = JSON.parse(msg);
             const rotateValue = (Math.round(Math.random() * 10) - 5) * 2; //degrees
             ROOM_DB_API.vote(roomId, userId, msgVote.vote.cardValue, rotateValue);
-            //openCardIfAllVotes(roomId);
+            openCardIfAllVotes(roomId);
         }
         broadcastRoom(roomId);
     });
