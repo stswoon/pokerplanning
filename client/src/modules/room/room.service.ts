@@ -24,10 +24,17 @@ function attachWsToRoom(callback: (data: Room) => void) {
         ws.close(5000, "Client 30 sec timeout");
     }, CONNECTION_TIMEOUT);
 
+    let wsHeartbeatTimeoutId;
+
     ws.onopen = () => {
         console.info("WS connected");
         wsTry = 0;
-        clearTimeout(wsConnectionTimeoutId);
+        wsHeartbeatTimeoutId = clearTimeout(wsConnectionTimeoutId);
+
+        setTimeout(() => {
+            console.log("ping");
+            ws.send("H")
+        }, 50 * 1000);
     };
 
     ws.onclose = (event: CloseEvent) => {
@@ -44,10 +51,14 @@ function attachWsToRoom(callback: (data: Room) => void) {
                 alert("SYSTEM ERROR: Can't connect to server");
             }
         }
+        clearTimeout(wsHeartbeatTimeoutId);
         console.debug(`WS error code ${event.code} and reason ${event.reason}`);
     };
 
-    ws.onerror = (error: any) => console.error("WS error:" + error.message);
+    ws.onerror = (error: any) => {
+        clearTimeout(wsHeartbeatTimeoutId);
+        console.error("WS error:" + error.message);
+    }
 
     ws.onmessage = (event: MessageEvent) => {
         console.debug("WS data", event.data);

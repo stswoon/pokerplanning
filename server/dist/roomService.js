@@ -17,7 +17,10 @@ const createOrJoinRoom = (ws, roomId, userId, userName) => {
     roomUserWsMap_1.RoomUserWsMapApi.addUser(roomId, userId, ws);
     console.log("Subscribe on user actions");
     ws.on("message", function (msg) {
-        if (msg === "clearCards") {
+        if (msg === "H") {
+            console.log(`client H userId=${userId}`);
+        }
+        else if (msg === "clearCards") {
             roomRepository_1.ROOM_DB_API.clearCards(roomId);
             roomRepository_1.ROOM_DB_API.setShowCards(roomId, false);
         }
@@ -46,8 +49,14 @@ const createOrJoinRoom = (ws, roomId, userId, userName) => {
             broadcastRoom(roomId);
         }
     });
-    console.log("Broadcast after add user to room");
-    setTimeout(() => broadcastRoom(roomId));
+    ws.on("error", function (err) {
+        console.error(`WS for user (${userName} : ${userId}) in room (${roomId}) was closed`);
+        console.error(err);
+    });
+    setTimeout(() => {
+        console.log(`Broadcast after add user to room (roomId=${roomId})`);
+        broadcastRoom(roomId);
+    });
 };
 exports.createOrJoinRoom = createOrJoinRoom;
 const broadcastRoom = (roomId) => {

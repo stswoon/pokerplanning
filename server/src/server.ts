@@ -27,8 +27,8 @@ app.get('/health', (req, res) => res.send('OK'));
 const appWs = expressWs(app);
 
 appWs.app.ws('/api/roomState', (ws: WS, req: express.Request, next): void => {
-    console.info(`WS request`);
     const {roomId, userId, userName} = req.query as { roomId: string, userId: string, userName: string };
+    console.info(`WS request roomId=${roomId}, userId=${userId} userName=${userName}`);
     try {
         createOrJoinRoom(ws, roomId, userId, userName);
     } catch (error) { // https://scoutapm.com/blog/express-error-handling

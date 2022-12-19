@@ -24,8 +24,8 @@ app.use((error, req, res, next) => {
 app.get('/health', (req, res) => res.send('OK'));
 const appWs = (0, express_ws_1.default)(app);
 appWs.app.ws('/api/roomState', (ws, req, next) => {
-    console.info(`WS request`);
     const { roomId, userId, userName } = req.query;
+    console.info(`WS request roomId=${roomId}, userId=${userId} userName=${userName}`);
     try {
         (0, roomService_1.createOrJoinRoom)(ws, roomId, userId, userName);
     }

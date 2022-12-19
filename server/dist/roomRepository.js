@@ -11,7 +11,7 @@ const getRoom = (id) => {
     return utils_1.utils.deepCopy(room);
 };
 const _saveRoom = (room) => {
-    console.debug(`Room (${room.id}) was changed, new value: ${room}`);
+    console.debug(`Room (${room.id}) was changed, new value: ${JSON.stringify(room)}`);
     ROOM_DB[room.id] = room;
 };
 const isRoomExist = (id) => !!ROOM_DB[id];

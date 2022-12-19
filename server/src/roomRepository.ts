@@ -26,7 +26,7 @@ const getRoom = (id: RoomId): Room => {
 }
 
 const _saveRoom = (room: Room): void => {
-    console.debug(`Room (${room.id}) was changed, new value: ${room}`);
+    console.debug(`Room (${room.id}) was changed, new value: ${JSON.stringify(room)}`);
     ROOM_DB[room.id] = room;
 }
 

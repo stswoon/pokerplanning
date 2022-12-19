@@ -17,7 +17,9 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
 
     console.log("Subscribe on user actions");
     ws.on("message", function (msg: string) {
-        if (msg === "clearCards") {
+        if (msg === "H") {
+            console.log(`client H userId=${userId}`);
+        } else if (msg === "clearCards") {
             ROOM_DB_API.clearCards(roomId);
             ROOM_DB_API.setShowCards(roomId, false);
         } else if (msg === "flipCards") {
@@ -43,9 +45,15 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
             broadcastRoom(roomId);
         }
     });
+    ws.on("error", function (err) {
+        console.error(`WS for user (${userName} : ${userId}) in room (${roomId}) was closed`);
+        console.error(err);
+    });
 
-    console.log("Broadcast after add user to room");
-    setTimeout(() => broadcastRoom(roomId));
+    setTimeout(() => {
+        console.log(`Broadcast after add user to room (roomId=${roomId})`);
+        broadcastRoom(roomId)
+    });
 }
 
 const broadcastRoom = (roomId: RoomId): void => {
