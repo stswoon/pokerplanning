@@ -31,11 +31,13 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  /*transition: all 5.5s;*/
 }
 
 .user {
-  height: 65px;
-  width: 65px;
+  height: 55px;
+  width: 55px;
   background-image: url("icons/u1.png");
   background-size: 100% 100%;
 }

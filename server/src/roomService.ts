@@ -1,9 +1,12 @@
-import { RoomId, UserId, ROOM_DB_API, Room } from "./roomRepository";
+import { RoomId, UserId, ROOM_DB_API} from "./roomRepository";
 import { RoomUserWsMapApi } from "./roomUserWsMap";
 import { startShrinkageOldRooms } from "./shrinkageOldRooms";
 import { JsMap, WS } from "./utils"
 
 startShrinkageOldRooms();
+
+const LAZY_REMOVE_TIMEOUT = 10;//sec;
+const userLateRemoveTimers: any = {};
 
 export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userName: string): void => {
     if (ROOM_DB_API.isRoomExist(roomId)) {
@@ -12,7 +15,13 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
         console.log(`Create room (${roomId}) with first user (${userName} : ${userId})`);
         ROOM_DB_API.createRoom(roomId);
     }
-    ROOM_DB_API.addUser(roomId, userId, userName);
+    if (userLateRemoveTimers[userId]) {
+        console.log(`Reconnect user (${userName} : ${userId}) in room (${roomId})`);
+        clearTimeout(userLateRemoveTimers[userId]);
+    } else {
+        console.log(`Real add user (${userName} : ${userId}) to room (${roomId})`);
+        ROOM_DB_API.addUser(roomId, userId, userName);
+    }
     RoomUserWsMapApi.addUser(roomId, userId, ws);
 
     console.log("Subscribe on user actions");
@@ -36,7 +45,13 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
     ws.on("close", function () {
         console.log(`WS for user (${userName} : ${userId}) in room (${roomId}) was closed`);
         RoomUserWsMapApi.removeUser(roomId, userId);
-        ROOM_DB_API.removeUser(roomId, userId);
+        userLateRemoveTimers[userId] = setTimeout(() => {
+            console.log(`Lazy remove for user (${userName} : ${userId}) in room (${roomId}) was closed`);
+            ROOM_DB_API.removeUser(roomId, userId);
+            delete userLateRemoveTimers[userId];
+            broadcastRoom(roomId);
+        }, LAZY_REMOVE_TIMEOUT * 1000);
+
         if (isEmptyRoom(roomId)) {
             console.log(`Room (${roomId}) is empty so remove it`);
             ROOM_DB_API.removeRoom(roomId);
@@ -45,7 +60,7 @@ export const createOrJoinRoom = (ws: WS, roomId: RoomId, userId: UserId, userNam
             broadcastRoom(roomId);
         }
     });
-    ws.on("error", function (err) {
+    ws.on("error", function (err: any) {
         console.error(`WS for user (${userName} : ${userId}) in room (${roomId}) was closed`);
         console.error(err);
     });

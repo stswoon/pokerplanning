@@ -89,7 +89,7 @@ export default defineComponent({
 }
 
 .table {
-  margin: 5px 10px;
+  margin: 0px 10px;
   display: flex;
   justify-content: space-around;
 }

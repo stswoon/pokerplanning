@@ -5,6 +5,8 @@ const roomRepository_1 = require("./roomRepository");
 const roomUserWsMap_1 = require("./roomUserWsMap");
 const shrinkageOldRooms_1 = require("./shrinkageOldRooms");
 (0, shrinkageOldRooms_1.startShrinkageOldRooms)();
+const LAZY_REMOVE_TIMEOUT = 10; //sec;
+const userLateRemoveTimers = {};
 const createOrJoinRoom = (ws, roomId, userId, userName) => {
     if (roomRepository_1.ROOM_DB_API.isRoomExist(roomId)) {
         console.log(`Add user (${userName} : ${userId}) to room (${roomId})`);
@@ -13,7 +15,14 @@ const createOrJoinRoom = (ws, roomId, userId, userName) => {
         console.log(`Create room (${roomId}) with first user (${userName} : ${userId})`);
         roomRepository_1.ROOM_DB_API.createRoom(roomId);
     }
-    roomRepository_1.ROOM_DB_API.addUser(roomId, userId, userName);
+    if (userLateRemoveTimers[userId]) {
+        console.log(`Reconnect user (${userName} : ${userId}) in room (${roomId})`);
+        clearTimeout(userLateRemoveTimers[userId]);
+    }
+    else {
+        console.log(`Real add user (${userName} : ${userId}) to room (${roomId})`);
+        roomRepository_1.ROOM_DB_API.addUser(roomId, userId, userName);
+    }
     roomUserWsMap_1.RoomUserWsMapApi.addUser(roomId, userId, ws);
     console.log("Subscribe on user actions");
     ws.on("message", function (msg) {
@@ -39,7 +48,12 @@ const createOrJoinRoom = (ws, roomId, userId, userName) => {
     ws.on("close", function () {
         console.log(`WS for user (${userName} : ${userId}) in room (${roomId}) was closed`);
         roomUserWsMap_1.RoomUserWsMapApi.removeUser(roomId, userId);
-        roomRepository_1.ROOM_DB_API.removeUser(roomId, userId);
+        userLateRemoveTimers[userId] = setTimeout(() => {
+            console.log(`Lazy remove for user (${userName} : ${userId}) in room (${roomId}) was closed`);
+            roomRepository_1.ROOM_DB_API.removeUser(roomId, userId);
+            delete userLateRemoveTimers[userId];
+            broadcastRoom(roomId);
+        }, LAZY_REMOVE_TIMEOUT * 1000);
         if (isEmptyRoom(roomId)) {
             console.log(`Room (${roomId}) is empty so remove it`);
             roomRepository_1.ROOM_DB_API.removeRoom(roomId);
